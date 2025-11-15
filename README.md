@@ -8,4 +8,5 @@ currently done the entity section
 the repository section has been completed
 currently the code has been pushed
 
-#service-section
+# service-section
+the application properties of connecting sql has been done
