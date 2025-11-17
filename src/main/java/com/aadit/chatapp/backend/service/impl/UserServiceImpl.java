@@ -2,9 +2,11 @@ package com.aadit.chatapp.backend.service.impl;
 
 import com.aadit.chatapp.backend.entity.User;
 import com.aadit.chatapp.backend.repository.UserRepository;
-import com.aadit.chatapp.backend.service.Userservice;
+import com.aadit.chatapp.backend.service.UserService;
+import org.springframework.stereotype.Service;
 
-public class UserServiceImpl implements Userservice {
+@Service
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
