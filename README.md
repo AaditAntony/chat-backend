@@ -20,3 +20,4 @@ this solved the problems regarding the section
 
 # auth-controller
 create the auth controller
+did the register authentication
