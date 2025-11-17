@@ -17,3 +17,5 @@ problems : while doing this section i have come accrossed a problem of the lambo
 the settting in the intellij ide and the problem has been rectified in the setting
 and the lambok plugin in the intellji plateform has beeen installed
 this solved the problems regarding the section
+
+# auth-controller
