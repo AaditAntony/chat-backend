@@ -19,3 +19,4 @@ and the lambok plugin in the intellji plateform has beeen installed
 this solved the problems regarding the section
 
 # auth-controller
+create the auth controller
