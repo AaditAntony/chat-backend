@@ -44,3 +44,5 @@ when the user login the jwt token and its security for the user validation will 
 if the user has been valid a token will be given to the user 
 making the user a authenticated one
 tge code has been done and pushed
+
+# websocket-configuration
