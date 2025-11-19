@@ -46,3 +46,4 @@ making the user a authenticated one
 tge code has been done and pushed
 
 # websocket-configuration
+the configuration dependency has been added
