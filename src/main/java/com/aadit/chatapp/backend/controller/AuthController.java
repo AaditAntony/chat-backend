@@ -1,6 +1,8 @@
 package com.aadit.chatapp.backend.controller;
 
+import com.aadit.chatapp.backend.dto.LoginRequest;
 import com.aadit.chatapp.backend.dto.RegisterRequest;
+import com.aadit.chatapp.backend.dto.TokenResponse;
 import com.aadit.chatapp.backend.entity.User;
 import com.aadit.chatapp.backend.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,11 @@ public class AuthController {
     @PostMapping("/register")
     public User register(@RequestBody RegisterRequest request) {
         return userService.register(request.getUsername(), request.getPassword());
+    }
+    @PostMapping("/login")
+    public TokenResponse login(@RequestBody LoginRequest request) {
+        String token = userService.login(request.getUsername(), request.getPassword());
+        return new TokenResponse(token);
     }
 
 }
