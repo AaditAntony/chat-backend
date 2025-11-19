@@ -41,3 +41,4 @@ the code has been pushed
 # login-controller
 the branch has been created for so the user can login
 when the user login the jwt token and its security for the user validation will be checked using database
+if the user has been valid a token will be given to the user
