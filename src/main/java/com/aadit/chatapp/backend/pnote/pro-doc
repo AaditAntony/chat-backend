@@ -1,0 +1,70 @@
+PROJECT DOCUMENTATION
+
+1. Project Initialization
+The Spring Boot application was created using Maven with Java 21.
+Core modules included:
+Spring Web
+Spring Data JPA
+Spring Security
+MySQL Connector
+Lombok
+This established the foundation for our chat application's backend.
+2. Database Connection Setup
+Configured application.properties to connect the backend to a MySQL database.
+Verified successful startup logs and ensured Hibernate created necessary tables.
+3. User Entity & Repository Creation
+Developed the User entity with fields:
+id
+username
+password
+Implemented UserRepository extending JpaRepository to perform CRUD and queries.
+4. User Registration API Implementation
+Created a clean registration flow under /api/auth/register:
+Validates incoming data
+Ensures username is unique
+Saves a new user to the database
+Returns the registered user as a JSON response
+Successfully tested using Postman.
+5. Initial Security Configuration
+Added a basic SecurityConfig to:
+Disable CSRF for APIs
+Permit access to /api/auth/** (login, register)
+Restrict all other endpoints
+Disable form login
+Use stateless API-style authentication
+This was preparation for JWT-based security.
+6. JWT (JSON Web Token) Integration Setup
+Installed jjwt dependencies and implemented:
+JwtUtil class
+Token generation logic
+Token validation and claim parsing
+Expiry timestamp handling
+This established the authentication mechanism for session-less communication.
+7. Login Endpoint With JWT Token Generation
+Implemented /api/auth/login API:
+Validates username and password
+Checks credentials against database
+Generates a signed JWT token
+Returns token to the client
+This token is essential for accessing secured API endpoints.
+8. JWT Authentication Filter
+Created a custom filter to:
+Intercept incoming requests
+Read the Authorization header
+Validate the JWT token
+Extract username from token
+Set authentication inside Spring Security
+This enables seamless token-based authentication for protected routes.
+9. Updated SecurityConfig With JWT Integration
+Integrated the JWT filter into Spring Security:
+Added filter before UsernamePasswordAuthenticationFilter
+Switched authentication mode to fully stateless
+Ensured protected routes require a valid JWT token
+This completed the full authentication pipeline.
+10. API Testing With Postman
+Performed verification for:
+Register → Success
+Login → Returns valid JWT
+Protected endpoints:
+Access without token → 401 Unauthorized
+Access with token → Successfully authorized
