@@ -52,3 +52,4 @@ the configuration dependency has been added
 added the websoket configuration for the the connection of the froentend using html
 
 # chat-message-model
+added the model for the message section in the project 
