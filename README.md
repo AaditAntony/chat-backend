@@ -49,3 +49,4 @@ tge code has been done and pushed
 the configuration dependency has been added
 
 # websoket-configuration-2
+added the websoket configuration for the the connection of the froentend using html
