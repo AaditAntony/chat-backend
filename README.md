@@ -55,3 +55,4 @@ added the websoket configuration for the the connection of the froentend using h
 added the model for the message section in the project 
 
 # chat-controller
+the controller has been added and the code has been tested using html and is working fine
