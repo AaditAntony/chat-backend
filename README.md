@@ -53,3 +53,5 @@ added the websoket configuration for the the connection of the froentend using h
 
 # chat-message-model
 added the model for the message section in the project 
+
+# chat-controller
