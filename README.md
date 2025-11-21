@@ -65,3 +65,4 @@ created a database for the message entiy to store the messages
 used to connect the dtabase with the message service
 
 # message-service
+implemented the message service and the the implementation is also done
