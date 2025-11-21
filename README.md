@@ -63,3 +63,5 @@ created a database for the message entiy to store the messages
 
 # message-repository
 used to connect the dtabase with the message service
+
+# message-service
