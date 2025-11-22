@@ -69,3 +69,4 @@ implemented the message service and the the implementation is also done
 
 # message-controller
 the controller is working
+changed the path of the chatcontroller
