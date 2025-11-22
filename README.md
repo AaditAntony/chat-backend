@@ -71,3 +71,4 @@ implemented the message service and the the implementation is also done
 the controller is working
 changed the path of the chatcontroller
 changed the security rules for the permit of the api
+the global chat mvc is complete
