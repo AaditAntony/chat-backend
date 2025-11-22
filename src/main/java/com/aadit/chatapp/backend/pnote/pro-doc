@@ -77,3 +77,7 @@ Login → Returns valid JWT
 Protected endpoints:
 Access without token → 401 Unauthorized
 Access with token → Successfully authorized
+
+brew services start mysql
+mysql -u root -p
+brew services stop  mysql

@@ -28,10 +28,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable()) // disable CSRF
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // register & login allowed
-                        .anyRequest().authenticated() // all other APIs require token
+                        // allow websocket handshake
+                        .requestMatchers("/ws/**").permitAll()
+
+                        // allow STOMP messaging paths
+                        .requestMatchers("/app/**").permitAll()
+                        .requestMatchers("/topic/**").permitAll()
+
+                        // auth endpoints
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // everything else requires token
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -41,6 +51,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
