@@ -89,3 +89,4 @@ the model class has been created for the private chat
 the controller class has been created till now
 
 #private-chat-entiy-PrivateMessage
+created the entity for the private chat to store the messages in the database
