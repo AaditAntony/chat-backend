@@ -10,3 +10,5 @@ public class ChatBackendApplication {
 	}
 
 }
+
+// the global chat is done ok
