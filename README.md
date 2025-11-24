@@ -73,3 +73,5 @@ changed the path of the chatcontroller
 changed the security rules for the permit of the api
 the global chat mvc is complete
 the code has been tested and is working fine
+
+# global-chat-completed
