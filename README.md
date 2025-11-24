@@ -87,3 +87,5 @@ the model class has been created for the private chat
 
 # private-chat-controller
 the controller class has been created till now
+
+#private-chat-entiy-PrivateMessage
