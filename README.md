@@ -83,5 +83,4 @@ the code has been pushed
    # PRIVATE CHAT SECTION
 
 # private-chat-model
-
- 
+the model class has been created for the private chat
