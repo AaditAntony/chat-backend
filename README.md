@@ -75,3 +75,4 @@ the global chat mvc is complete
 the code has been tested and is working fine
 
 # global-chat-completed
+the global chat is completed
