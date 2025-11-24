@@ -84,3 +84,5 @@ the code has been pushed
 
 # private-chat-model
 the model class has been created for the private chat
+
+# private-chat-controller
