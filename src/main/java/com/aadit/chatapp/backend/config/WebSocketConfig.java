@@ -24,22 +24,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*")
+                .setAllowedOriginPatterns("*")  // Changed from setAllowedOrigins
                 .withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // Prefix for messages coming from frontend
         registry.setApplicationDestinationPrefixes("/app");
-
-        // Broker enables routing to:
-        // /topic  (public)
-        // /queue  (private)
-        // /user   (private user-specific)
         registry.enableSimpleBroker("/topic", "/queue", "/user");
-
-        // Required for @SendToUser & convertAndSendToUser
         registry.setUserDestinationPrefix("/user");
     }
 

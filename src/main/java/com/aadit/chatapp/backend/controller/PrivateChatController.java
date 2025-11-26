@@ -4,6 +4,8 @@ import com.aadit.chatapp.backend.entity.PrivateMessage;
 import com.aadit.chatapp.backend.service.PrivateMessageService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.user.SimpUser;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 
@@ -15,11 +17,14 @@ public class PrivateChatController {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final PrivateMessageService privateMessageService;
+    private final SimpUserRegistry simpUserRegistry;
 
     public PrivateChatController(SimpMessagingTemplate messagingTemplate,
-                                 PrivateMessageService privateMessageService) {
+                                 PrivateMessageService privateMessageService,
+                                 SimpUserRegistry simpUserRegistry) {
         this.messagingTemplate = messagingTemplate;
         this.privateMessageService = privateMessageService;
+        this.simpUserRegistry = simpUserRegistry;
     }
 
     @MessageMapping("/private.send")
@@ -30,6 +35,12 @@ public class PrivateChatController {
         System.out.println("Message sender: " + message.getSender());
         System.out.println("Message receiver: " + message.getReceiver());
         System.out.println("Message content: " + message.getContent());
+
+        // Print connected users
+        System.out.println("Connected users:");
+        for (SimpUser user : simpUserRegistry.getUsers()) {
+            System.out.println(" - " + user.getName());
+        }
 
         // Validate that the sender matches the authenticated user
         if (principal == null || !principal.getName().equals(message.getSender())) {
@@ -46,26 +57,14 @@ public class PrivateChatController {
         PrivateMessage saved = privateMessageService.saveMessage(message);
         System.out.println("Message saved to DB with ID: " + saved.getId());
 
-        // 2. Send to the specific receiver only
-        String receiverDestination = "/user/" + saved.getReceiver() + "/queue/private";
-        System.out.println("Sending to destination: " + receiverDestination);
+        // TEMPORARY: Send to public topic for testing
+        String publicTopic = "/topic/private." + saved.getReceiver();
+        System.out.println("TEMPORARY: Sending to public topic: " + publicTopic);
 
-        messagingTemplate.convertAndSendToUser(
-                saved.getReceiver(),               // target username
-                "/queue/private",                  // user's private queue
-                saved                              // payload
-        );
+        // Send to a public topic that only the receiver subscribes to
+        messagingTemplate.convertAndSend(publicTopic, saved);
+        System.out.println("✓ Message sent to public topic successfully!");
 
-        System.out.println("Message sent to receiver successfully!");
-
-        // 3. Optional: Also send confirmation to sender
-        messagingTemplate.convertAndSendToUser(
-                saved.getSender(),                 // sender username
-                "/queue/private",                  // sender's private queue
-                saved                              // payload
-        );
-
-        System.out.println("Message sent to sender successfully!");
         System.out.println("=== END DEBUG ===");
     }
 }
