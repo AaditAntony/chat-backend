@@ -101,3 +101,4 @@ the code has been pushed
 # test-2
 changed the websocket configuration
 changed the private chat controller for the debug purposes
+changed the websocket authInterceptor class
