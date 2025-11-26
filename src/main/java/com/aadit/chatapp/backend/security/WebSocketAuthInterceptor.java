@@ -37,11 +37,17 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
 
                         UsernamePasswordAuthenticationToken auth =
                                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+                        // THIS IS CRITICAL: Set the authentication in SecurityContext
                         SecurityContextHolder.getContext().setAuthentication(auth);
+
+                        // AND set it in the accessor for WebSocket session
                         accessor.setUser(auth);
+
+                        System.out.println("✓ WebSocket authenticated user: " + username);
                     }
                 } catch (Exception e) {
-                    // Token is invalid, connection will be rejected
+                    System.out.println("✗ WebSocket auth failed: " + e.getMessage());
                 }
             }
         }
