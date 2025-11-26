@@ -30,12 +30,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // allow websocket handshake
+                        // allow websocket handshake without auth (authentication happens at WebSocket level)
                         .requestMatchers("/ws/**").permitAll()
-
-                        // allow STOMP messaging paths
-                        .requestMatchers("/app/**").permitAll()
-                        .requestMatchers("/topic/**").permitAll()
 
                         // auth endpoints
                         .requestMatchers("/api/auth/**").permitAll()
@@ -51,7 +47,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -69,4 +64,3 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 }
-

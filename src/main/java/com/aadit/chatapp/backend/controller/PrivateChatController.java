@@ -1,27 +1,71 @@
 package com.aadit.chatapp.backend.controller;
 
-import com.aadit.chatapp.backend.model.PrivateMessage;
+import com.aadit.chatapp.backend.entity.PrivateMessage;
+import com.aadit.chatapp.backend.service.PrivateMessageService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
 
 @Controller
 public class PrivateChatController {
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final PrivateMessageService privateMessageService;
 
-    public PrivateChatController(SimpMessagingTemplate messagingTemplate) {
+    public PrivateChatController(SimpMessagingTemplate messagingTemplate,
+                                 PrivateMessageService privateMessageService) {
         this.messagingTemplate = messagingTemplate;
+        this.privateMessageService = privateMessageService;
     }
 
     @MessageMapping("/private.send")
-    public void sendPrivateMessage(PrivateMessage message) {
+    public void sendPrivateMessage(PrivateMessage message, Principal principal) {
 
-        // Deliver to the specific user's inbox
+        System.out.println("=== PRIVATE MESSAGE DEBUG ===");
+        System.out.println("Principal: " + (principal != null ? principal.getName() : "null"));
+        System.out.println("Message sender: " + message.getSender());
+        System.out.println("Message receiver: " + message.getReceiver());
+        System.out.println("Message content: " + message.getContent());
+
+        // Validate that the sender matches the authenticated user
+        if (principal == null || !principal.getName().equals(message.getSender())) {
+            System.out.println("ERROR: Sender authentication failed!");
+            throw new AccessDeniedException("Sender does not match authenticated user");
+        }
+
+        // Set timestamp if not set
+        if (message.getTimestamp() == null) {
+            message.setTimestamp(LocalDateTime.now());
+        }
+
+        // 1. Save private message to DB
+        PrivateMessage saved = privateMessageService.saveMessage(message);
+        System.out.println("Message saved to DB with ID: " + saved.getId());
+
+        // 2. Send to the specific receiver only
+        String receiverDestination = "/user/" + saved.getReceiver() + "/queue/private";
+        System.out.println("Sending to destination: " + receiverDestination);
+
         messagingTemplate.convertAndSendToUser(
-                message.getReceiver(),
-                "/queue/messages",
-                message
+                saved.getReceiver(),               // target username
+                "/queue/private",                  // user's private queue
+                saved                              // payload
         );
+
+        System.out.println("Message sent to receiver successfully!");
+
+        // 3. Optional: Also send confirmation to sender
+        messagingTemplate.convertAndSendToUser(
+                saved.getSender(),                 // sender username
+                "/queue/private",                  // sender's private queue
+                saved                              // payload
+        );
+
+        System.out.println("Message sent to sender successfully!");
+        System.out.println("=== END DEBUG ===");
     }
 }
