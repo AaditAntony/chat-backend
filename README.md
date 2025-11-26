@@ -92,3 +92,4 @@ the controller class has been created till now
 created the entity for the private chat to store the messages in the database
 
 # test
+added the additional controller
