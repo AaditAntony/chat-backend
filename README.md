@@ -105,3 +105,4 @@ changed the websocket authInterceptor class
 the code has been pushed
 
 # fixing-private-message
+the problems have been resolved for the private chat
