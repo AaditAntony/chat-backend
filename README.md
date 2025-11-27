@@ -103,3 +103,5 @@ changed the websocket configuration
 changed the private chat controller for the debug purposes
 changed the websocket authInterceptor class
 the code has been pushed
+
+# fixing-private-message
