@@ -114,4 +114,4 @@ the code has been pushedß
 
 # fixing-private-message
 deleted the model in the section called the PrivateMessage
-updated the controller section
+updated the controller section called the PrivateChatController
