@@ -113,4 +113,4 @@ the code of the private chat controller has been changed
 the code has been pushedß
 
 # fixing-private-message
-deleted the model in the section
+deleted the model in the section called the PrivateMessage
