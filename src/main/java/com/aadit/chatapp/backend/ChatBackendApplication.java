@@ -11,4 +11,4 @@ public class ChatBackendApplication {
 
 }
 
-// the global chat is done ok
+// The mvp of the chat application is done
