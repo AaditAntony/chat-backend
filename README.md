@@ -117,3 +117,4 @@ deleted the model in the section called the PrivateMessage
 updated the controller section called the PrivateChatController
 added the new controller called the TestController
 the code is tested and working fine 
+the code has been pushed
