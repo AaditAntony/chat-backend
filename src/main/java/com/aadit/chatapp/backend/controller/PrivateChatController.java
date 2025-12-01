@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class PrivateChatController {
@@ -80,18 +79,4 @@ public class PrivateChatController {
             e.printStackTrace();
         }
     }
-    @RestController
-    @RequestMapping("/api/test")
-    public class TestController {
-
-        @GetMapping("/echo")
-        public String echo() {
-            return "Backend is working! Time: " + LocalDateTime.now();
-        }
-
-        @PostMapping("/simulate-message")
-        public String simulatePrivateMessage() {
-            System.out.println("🧪 TEST: Simulated message received");
-            return "Test message simulation completed";
-        }}
 }
