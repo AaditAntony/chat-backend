@@ -120,3 +120,4 @@ the code is tested and working fine
 the code has been pushed
 
 # testing-mobile-android
+according to the test the websocket is connecting
