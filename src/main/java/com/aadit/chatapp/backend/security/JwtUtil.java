@@ -13,8 +13,9 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // Secret key used for signing the token
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // FIXED: Use a constant secret key instead of generating random one
+    private final String SECRET_KEY = "mySuperSecretKeyForJWTTokenGeneration1234567890";
+    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
     // Token validity (1 hour)
     private final long EXPIRATION_TIME = 1000 * 60 * 60;
@@ -25,7 +26,7 @@ public class JwtUtil {
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(key)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 

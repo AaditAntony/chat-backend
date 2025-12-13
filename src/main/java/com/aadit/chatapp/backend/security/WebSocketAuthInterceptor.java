@@ -28,45 +28,49 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-        if (accessor != null) {
-            if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                String token = extractToken(accessor);
+        if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
+            System.out.println("🎯 WebSocket CONNECT received");
 
-                if (token != null) {
+            // Extract token
+            List<String> authHeaders = accessor.getNativeHeader("Authorization");
+            if (authHeaders != null && !authHeaders.isEmpty()) {
+                String authHeader = authHeaders.get(0);
+                System.out.println("🔍 Authorization header: " + authHeader);
+
+                if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                    String token = authHeader.substring(7);
+                    System.out.println("✅ Token extracted: " + token.substring(0, Math.min(20, token.length())) + "...");
+
                     try {
                         String username = jwtUtil.extractUsername(token);
-                        if (username != null && jwtUtil.isTokenValid(token, username)) {
+                        System.out.println("🔑 Username from token: " + username);
+
+                        if (jwtUtil.isTokenValid(token, username)) {
+                            System.out.println("✅ Token is valid!");
                             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                             UsernamePasswordAuthenticationToken auth =
                                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                            // CRITICAL: Set authentication in SecurityContext
                             SecurityContextHolder.getContext().setAuthentication(auth);
-
-                            // CRITICAL: Set user in the accessor for WebSocket session
                             accessor.setUser(auth);
 
-                            System.out.println("✓ WebSocket authenticated user: " + username);
+                            System.out.println("✓ WebSocket user authenticated: " + username);
+                        } else {
+                            System.out.println("❌ Token validation failed!");
                         }
                     } catch (Exception e) {
-                        System.out.println("✗ WebSocket auth failed: " + e.getMessage());
+                        System.out.println("❌ Error during WebSocket auth: " + e.getMessage());
+                        e.printStackTrace();
                     }
+                } else {
+                    System.out.println("❌ No Bearer token in header");
                 }
+            } else {
+                System.out.println("❌ No Authorization header found");
             }
         }
-        return message;
-    }
 
-    private String extractToken(StompHeaderAccessor accessor) {
-        // Try to get Authorization header from native headers
-        List<String> authHeaders = accessor.getNativeHeader("Authorization");
-        if (authHeaders != null && !authHeaders.isEmpty()) {
-            String authHeader = authHeaders.get(0);
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                return authHeader.substring(7);
-            }
-        }
-        return null;
+        return message;
     }
 }

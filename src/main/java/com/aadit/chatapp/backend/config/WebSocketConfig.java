@@ -1,5 +1,4 @@
 package com.aadit.chatapp.backend.config;
-
 import com.aadit.chatapp.backend.security.WebSocketAuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -23,9 +22,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // Option 1: Plain WebSocket (for Flutter/mobile apps)
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*")  // Changed from setAllowedOrigins
-                .withSockJS();
+                .setAllowedOriginPatterns("*");
+
+        // Option 2: SockJS endpoint (for web browsers)
+//        registry.addEndpoint("/ws/sockjs")
+//                .setAllowedOriginPatterns("*")
+//                .withSockJS();
     }
 
     @Override
