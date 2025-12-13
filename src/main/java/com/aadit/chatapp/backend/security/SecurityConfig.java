@@ -41,7 +41,8 @@ public class SecurityConfig {
 
                         // auth endpoints
                         .requestMatchers("/api/auth/**").permitAll()
-
+                        // TEST endpoints (add this line)
+                                .requestMatchers("/api/test/**").permitAll()
                         // everything else requires token
                         .anyRequest().authenticated()
                 )
