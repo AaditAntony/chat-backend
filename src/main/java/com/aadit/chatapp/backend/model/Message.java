@@ -11,5 +11,6 @@ public class Message {
     private String sender;
     private String receiver; // null for public messages
     private String content;
+    private MessageType type;
     private LocalDateTime timestamp = LocalDateTime.now();
 }
