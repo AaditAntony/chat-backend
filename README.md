@@ -127,3 +127,4 @@ the message is not recivin to the other chat
 the message model has been added using lambok
 
 # messageType
+the message type is added completely
