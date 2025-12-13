@@ -122,3 +122,5 @@ the code has been pushed
 # testing-mobile-android
 according to the test the websocket is connecting
 the message is not recivin to the other chat
+
+# model/messageModel
