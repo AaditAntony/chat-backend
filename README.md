@@ -130,3 +130,5 @@ the message model has been added using lambok
 the message type is added completely
 <br>
 the message model is modified
+
+# dto/chatMessage
