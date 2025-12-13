@@ -124,3 +124,4 @@ according to the test the websocket is connecting
 the message is not recivin to the other chat
 
 # model/messageModel
+the message model has been added using lambok
