@@ -145,3 +145,4 @@ the chat message of the dto is done
   the private chat controller has been updated
   
 # update-securityConfig
+the security config has been updated
