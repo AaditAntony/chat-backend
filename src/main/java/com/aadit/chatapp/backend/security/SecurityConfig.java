@@ -33,17 +33,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Add this line
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // allow websocket handshake without auth
-                        .requestMatchers("/ws/**").permitAll()
+                        // ========== ALLOW THESE WITHOUT AUTH ==========
+                        // WebSocket connections
+                        .requestMatchers("/ws", "/ws/**", "/ws/sockjs/**").permitAll()
 
-                        // auth endpoints
+                        // STOMP endpoints (WebSocket messaging)
+                        .requestMatchers("/app/**", "/topic/**", "/queue/**", "/user/**").permitAll()
+
+                        // REST API endpoints
                         .requestMatchers("/api/auth/**").permitAll()
-                        // TEST endpoints (add this line)
-                                .requestMatchers("/api/test/**").permitAll()
-                        // everything else requires token
+                        .requestMatchers("/api/test/**").permitAll()
+
+                        // ========== EVERYTHING ELSE NEEDS AUTH ==========
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
