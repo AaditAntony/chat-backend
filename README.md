@@ -133,3 +133,5 @@ the message model is modified
 
 # dto/chatMessage
 the chat message of the dto is done
+
+# delete-files
