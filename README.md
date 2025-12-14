@@ -137,3 +137,4 @@ the chat message of the dto is done
 # delete-files
  deleted the file name called the chat controller
  deleted the file name called the message controller
+# dto/-websocketMessageDto
