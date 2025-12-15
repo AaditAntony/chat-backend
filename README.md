@@ -149,3 +149,4 @@ the security config has been updated
 
 # test-web-working-set
 the websocket connection is working
+the html file is working and the chat is now working
