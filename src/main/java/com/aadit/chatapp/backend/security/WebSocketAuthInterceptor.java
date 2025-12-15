@@ -31,43 +31,56 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
         if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
             System.out.println("🎯 WebSocket CONNECT received");
 
-            // Extract token
+            // Extract token from Authorization header
             List<String> authHeaders = accessor.getNativeHeader("Authorization");
+            String token = null;
+
             if (authHeaders != null && !authHeaders.isEmpty()) {
                 String authHeader = authHeaders.get(0);
-                System.out.println("🔍 Authorization header: " + authHeader);
+                System.out.println("🔍 Authorization header: " + (authHeader != null ? authHeader.substring(0, Math.min(20, authHeader.length())) : "null"));
 
                 if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                    String token = authHeader.substring(7);
-                    System.out.println("✅ Token extracted: " + token.substring(0, Math.min(20, token.length())) + "...");
+                    token = authHeader.substring(7);
+                }
+            }
 
-                    try {
-                        String username = jwtUtil.extractUsername(token);
-                        System.out.println("🔑 Username from token: " + username);
+            // Also check for "token" header (some clients send this)
+            if (token == null) {
+                List<String> tokenHeaders = accessor.getNativeHeader("token");
+                if (tokenHeaders != null && !tokenHeaders.isEmpty()) {
+                    token = tokenHeaders.get(0);
+                    System.out.println("✅ Found token in 'token' header");
+                }
+            }
 
-                        if (jwtUtil.isTokenValid(token, username)) {
-                            System.out.println("✅ Token is valid!");
-                            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (token != null) {
+                try {
+                    System.out.println("🔑 Validating token...");
+                    String username = jwtUtil.extractUsername(token);
+                    System.out.println("✅ Username from token: " + username);
 
-                            UsernamePasswordAuthenticationToken auth =
-                                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    if (jwtUtil.isTokenValid(token, username)) {
+                        System.out.println("✅ Token is valid!");
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                            SecurityContextHolder.getContext().setAuthentication(auth);
-                            accessor.setUser(auth);
+                        UsernamePasswordAuthenticationToken auth =
+                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                            System.out.println("✓ WebSocket user authenticated: " + username);
-                        } else {
-                            System.out.println("❌ Token validation failed!");
-                        }
-                    } catch (Exception e) {
-                        System.out.println("❌ Error during WebSocket auth: " + e.getMessage());
-                        e.printStackTrace();
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                        accessor.setUser(auth);
+
+                        System.out.println("✓ WebSocket user authenticated: " + username);
+                    } else {
+                        System.out.println("❌ Token validation failed!");
                     }
-                } else {
-                    System.out.println("❌ No Bearer token in header");
+                } catch (Exception e) {
+                    System.out.println("❌ Error during WebSocket auth: " + e.getMessage());
                 }
             } else {
-                System.out.println("❌ No Authorization header found");
+                System.out.println("⚠️ No token found - allowing connection for testing");
+                // For testing, allow connection without token
+                // In production, you should reject the connection
+                accessor.setUser(() -> "anonymous");
             }
         }
 
