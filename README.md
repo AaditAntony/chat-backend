@@ -148,3 +148,4 @@ the chat message of the dto is done
 the security config has been updated
 
 # test-web-working-set
+the websocket connection is working
